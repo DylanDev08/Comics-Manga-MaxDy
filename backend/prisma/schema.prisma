@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  email    String @unique
+  password String
+  role     Role   @default(USER)
+
+  favorites      Favorite[]
+  ratings        Rating[]
+  comments       Comment[]
+  readingHistory ReadingHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Manga {
+  id          String      @id @default(uuid())
+  title       String
+  slug        String      @unique
+  description String
+  coverImage  String?
+  author      String?
+  status      MangaStatus @default(ONGOING)
+  releaseDate DateTime?
+  endDate     DateTime?
+
+  genres         MangaGenre[]
+  chapters       Chapter[]
+  favorites      Favorite[]
+  ratings        Rating[]
+  comments       Comment[]
+  readingHistory ReadingHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id   String @id @default(uuid())
+  name String @unique
+  slug String @unique
+
+  mangas MangaGenre[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model MangaGenre {
+  id      String @id @default(uuid())
+  mangaId String
+  genreId String
+
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  genre Genre @relation(fields: [genreId], references: [id], onDelete: Cascade)
+
+  @@unique([mangaId, genreId])
+}
+
+model Chapter {
+  id          String    @id @default(uuid())
+  title       String
+  number      Int
+  contentUrl  String?
+  mangaId     String
+  publishedAt DateTime?
+
+  manga          Manga            @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  readingHistory ReadingHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([mangaId, number])
+}
+
+model Favorite {
+  id      String @id @default(uuid())
+  userId  String
+  mangaId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, mangaId])
+}
+
+model Rating {
+  id      String @id @default(uuid())
+  score   Int
+  userId  String
+  mangaId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, mangaId])
+}
+
+model Comment {
+  id      String @id @default(uuid())
+  content String
+  userId  String
+  mangaId String
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga Manga @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ReadingHistory {
+  id        String @id @default(uuid())
+  userId    String
+  mangaId   String
+  chapterId String
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  manga   Manga   @relation(fields: [mangaId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  readAt DateTime @default(now())
+
+  @@unique([userId, chapterId])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum MangaStatus {
+  ONGOING
+  FINISHED
+  PAUSED
+  CANCELLED
+}
