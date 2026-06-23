@@ -11,11 +11,7 @@ const getUserFavorites = async (req, res, next) => {
 
 const addFavorite = async (req, res, next) => {
   try {
-    const favorite = await favoriteService.addFavorite(
-      req.user.id,
-      req.body.mangaId
-    );
-
+    const favorite = await favoriteService.addFavorite(req.user.id, req.params.mangaId || req.body.mangaId);
     res.status(201).json({ ok: true, data: favorite });
   } catch (error) {
     next(error);
@@ -34,5 +30,5 @@ const removeFavorite = async (req, res, next) => {
 module.exports = {
   getUserFavorites,
   addFavorite,
-  removeFavorite
+  removeFavorite,
 };

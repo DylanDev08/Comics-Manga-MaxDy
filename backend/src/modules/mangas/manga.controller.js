@@ -2,17 +2,26 @@ const mangaService = require("./manga.service");
 
 const getAllMangas = async (req, res, next) => {
   try {
-    const mangas = await mangaService.getAllMangas();
+    const mangas = await mangaService.getAllMangas(req.query);
     res.json({ ok: true, data: mangas });
   } catch (error) {
     next(error);
   }
 };
 
-const getMangaById = async (req, res, next) => {
+const getMangaBySlug = async (req, res, next) => {
   try {
-    const manga = await mangaService.getMangaById(req.params.id);
+    const manga = await mangaService.getMangaBySlug(req.params.slug);
     res.json({ ok: true, data: manga });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getChaptersByManga = async (req, res, next) => {
+  try {
+    const chapters = await mangaService.getChaptersByMangaSlug(req.params.slug);
+    res.json({ ok: true, data: chapters });
   } catch (error) {
     next(error);
   }
@@ -47,8 +56,9 @@ const deleteManga = async (req, res, next) => {
 
 module.exports = {
   getAllMangas,
-  getMangaById,
+  getMangaBySlug,
+  getChaptersByManga,
   createManga,
   updateManga,
-  deleteManga
+  deleteManga,
 };

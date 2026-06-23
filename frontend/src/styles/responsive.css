@@ -1,0 +1,73 @@
+@media (max-width: 900px) {
+  .site-nav {
+    display: none;
+  }
+
+  .hero {
+    min-height: 720px;
+  }
+
+  .hero__stats,
+  .collection-grid,
+  .filters,
+  .page-section--split,
+  .detail-hero,
+  .user-page {
+    grid-template-columns: 1fr;
+  }
+
+  .hero__stats {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: calc(100% - 2.5rem);
+    margin: -5rem auto 2rem;
+  }
+
+  .detail-hero {
+    padding-top: 3rem;
+  }
+
+  .detail-hero > img {
+    width: 180px;
+  }
+
+  .user-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 620px) {
+  h1 {
+    font-size: 2.75rem;
+  }
+
+  .site-header {
+    padding-inline: 0.8rem;
+  }
+
+  .hero__content {
+    margin-left: 0;
+    padding-inline: 1rem;
+  }
+
+  .manga-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .manga-card--compact {
+    grid-template-columns: 76px 1fr;
+  }
+
+  .reader-controls,
+  .site-footer,
+  .section-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .auth-panel__links {
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+}

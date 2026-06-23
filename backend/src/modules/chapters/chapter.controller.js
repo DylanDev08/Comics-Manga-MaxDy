@@ -1,5 +1,14 @@
 const chapterService = require("./chapter.service");
 
+const getChapterById = async (req, res, next) => {
+  try {
+    const chapter = await chapterService.getChapterById(req.params.chapterId || req.params.id);
+    res.json({ ok: true, data: chapter });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getChaptersByManga = async (req, res, next) => {
   try {
     const chapters = await chapterService.getChaptersByManga(req.params.mangaId);
@@ -30,15 +39,16 @@ const updateChapter = async (req, res, next) => {
 const deleteChapter = async (req, res, next) => {
   try {
     await chapterService.deleteChapter(req.params.id);
-    res.json({ ok: true, message: "Capítulo eliminado" });
+    res.json({ ok: true, message: "Capitulo eliminado" });
   } catch (error) {
     next(error);
   }
 };
 
 module.exports = {
+  getChapterById,
   getChaptersByManga,
   createChapter,
   updateChapter,
-  deleteChapter
+  deleteChapter,
 };

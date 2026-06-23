@@ -1,0 +1,40 @@
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.03;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 6.3rem);
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+p {
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+.eyebrow {
+  margin-bottom: 0.7rem;
+  color: var(--color-red);
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}

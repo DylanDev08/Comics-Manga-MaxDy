@@ -1,9 +1,12 @@
 require("dotenv").config();
 
-const app = require('./app');
+const app = require("./app");
+const { assertEnv, getEnv } = require("./config/env");
 
-const PORT = process.env.PORT || 3000;
+assertEnv();
 
-app.listen(PORT,() => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+const env = getEnv();
+
+app.listen(env.port, () => {
+  console.log(`Servidor corriendo en http://localhost:${env.port}`);
 });

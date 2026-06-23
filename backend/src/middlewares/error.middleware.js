@@ -1,10 +1,17 @@
 const errorMiddleware = (err, req, res, next) => {
-    console.error(err);
+  const statusCode = err.statusCode || 500;
+  const isProduction = process.env.NODE_ENV === "production";
 
-    res.status(err.statusCode || 500).json({
-        ok: false,
-        message: err.message || "Error interno del servidor"
-    });
+  if (statusCode >= 500) {
+    console.error(err);
+  }
+
+  res.status(statusCode).json({
+    ok: false,
+    message: err.message || "Error interno del servidor",
+    errors: err.details || undefined,
+    stack: !isProduction && statusCode >= 500 ? err.stack : undefined,
+  });
 };
 
 module.exports = errorMiddleware;
