@@ -10,6 +10,8 @@ const commentRoutes = require("../modules/comments/comment.routes");
 const libraryRoutes = require("../modules/library/library.routes");
 const progressRoutes = require("../modules/progress/progress.routes");
 const rankingRoutes = require("../modules/rankings/ranking.routes");
+const adminRoutes = require("../modules/admin/admin.routes");
+const ratingRoutes = require("../modules/ratings/rating.routes");
 
 const router = express.Router();
 
@@ -23,5 +25,7 @@ router.use("/comments", commentRoutes);
 router.use("/library", libraryRoutes);
 router.use("/progress", progressRoutes);
 router.use("/rankings", rankingRoutes);
+router.use("/ratings", ratingRoutes);
+router.use("/admin", adminRoutes);
 
 module.exports = router;

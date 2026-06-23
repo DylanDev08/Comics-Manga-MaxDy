@@ -15,8 +15,13 @@ const reportCommentSchema = z.object({
   details: z.string().max(500).optional(),
 });
 
+const commentStatusSchema = z.object({
+  status: z.enum(["VISIBLE", "HIDDEN", "REPORTED", "DELETED"]),
+});
+
 module.exports = {
   createCommentSchema,
   updateCommentSchema,
   reportCommentSchema,
+  commentStatusSchema,
 };

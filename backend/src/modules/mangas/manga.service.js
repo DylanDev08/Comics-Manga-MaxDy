@@ -32,6 +32,7 @@ const getAllMangas = async (query) => {
   const where = {
     isPublished: true,
     ...(query.status ? { status: query.status } : {}),
+    ...(query.type ? { type: query.type } : {}),
     ...(query.search
       ? {
           OR: [

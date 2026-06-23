@@ -24,11 +24,18 @@ function MangaFilters({ filters, onChange }) {
       </label>
       <select value={filters.status} onChange={(event) => update("status", event.target.value)}>
         <option value="todos">Todos los estados</option>
-        <option value="ONGOING">En emision</option>
+        <option value="PUBLISHING">En emision</option>
         <option value="FINISHED">Finalizado</option>
         <option value="PAUSED">Pausado</option>
         <option value="CANCELLED">Cancelado</option>
         <option value="UPCOMING">Proximamente</option>
+      </select>
+      <select value={filters.type} onChange={(event) => update("type", event.target.value)}>
+        <option value="todos">Todos los tipos</option>
+        <option value="MANGA">Manga</option>
+        <option value="MANHWA">Manhwa</option>
+        <option value="MANHUA">Manhua</option>
+        <option value="COMIC">Comic</option>
       </select>
       <select value={filters.sort} onChange={(event) => update("sort", event.target.value)}>
         <option value="ranking">Ranking</option>

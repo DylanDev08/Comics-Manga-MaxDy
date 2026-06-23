@@ -1,9 +1,16 @@
 export const statusLabels = {
-  ONGOING: "En emision",
+  PUBLISHING: "En emision",
   FINISHED: "Finalizado",
   PAUSED: "Pausado",
   CANCELLED: "Cancelado",
   UPCOMING: "Proximamente",
+};
+
+export const typeLabels = {
+  MANGA: "Manga",
+  MANHWA: "Manhwa",
+  MANHUA: "Manhua",
+  COMIC: "Comic",
 };
 
 export const formatNumber = (value) => new Intl.NumberFormat("es-AR").format(value || 0);

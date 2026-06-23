@@ -2,10 +2,13 @@
 CREATE TYPE "Role" AS ENUM ('USER', 'MODERATOR', 'ADMIN');
 
 -- CreateEnum
-CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'SUSPENDED', 'BANNED');
+CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'BLOCKED');
 
 -- CreateEnum
-CREATE TYPE "MangaStatus" AS ENUM ('ONGOING', 'FINISHED', 'PAUSED', 'CANCELLED', 'UPCOMING');
+CREATE TYPE "MangaType" AS ENUM ('MANGA', 'MANHWA', 'MANHUA', 'COMIC');
+
+-- CreateEnum
+CREATE TYPE "MangaStatus" AS ENUM ('PUBLISHING', 'FINISHED', 'PAUSED', 'CANCELLED', 'UPCOMING');
 
 -- CreateEnum
 CREATE TYPE "LibraryStatus" AS ENUM ('READING', 'PLANNED', 'COMPLETED', 'DROPPED', 'PAUSED');
@@ -56,7 +59,8 @@ CREATE TABLE "Manga" (
     "coverUrl" TEXT,
     "bannerUrl" TEXT,
     "author" TEXT,
-    "status" "MangaStatus" NOT NULL DEFAULT 'ONGOING',
+    "type" "MangaType" NOT NULL DEFAULT 'MANGA',
+    "status" "MangaStatus" NOT NULL DEFAULT 'PUBLISHING',
     "publicationStart" TIMESTAMP(3),
     "publicationEnd" TIMESTAMP(3),
     "score" DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -223,6 +227,7 @@ CREATE INDEX "Session_userId_idx" ON "Session"("userId");
 CREATE INDEX "Session_expiresAt_idx" ON "Session"("expiresAt");
 CREATE UNIQUE INDEX "Manga_slug_key" ON "Manga"("slug");
 CREATE INDEX "Manga_status_idx" ON "Manga"("status");
+CREATE INDEX "Manga_type_idx" ON "Manga"("type");
 CREATE INDEX "Manga_ranking_idx" ON "Manga"("ranking");
 CREATE INDEX "Manga_popularity_idx" ON "Manga"("popularity");
 CREATE UNIQUE INDEX "Genre_name_key" ON "Genre"("name");

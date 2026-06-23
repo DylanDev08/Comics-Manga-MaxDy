@@ -1,11 +1,12 @@
 import { ChevronLeft, ChevronRight, Columns2, Rows3 } from "lucide-react";
+import { Link } from "react-router-dom";
 
-function ReaderControls({ mode, onModeChange, previousTo, nextTo }) {
+function ReaderControls({ mode, onModeChange, previousTo, nextTo, onSaveProgress }) {
   return (
     <div className="reader-controls">
-      <a className="button button--ghost" href={previousTo}>
+      <Link className="button button--ghost" to={previousTo}>
         <ChevronLeft size={18} /> <span>Anterior</span>
-      </a>
+      </Link>
       <div className="segmented-control">
         <button className={mode === "vertical" ? "is-active" : ""} type="button" onClick={() => onModeChange("vertical")}>
           <Rows3 size={17} />
@@ -14,9 +15,12 @@ function ReaderControls({ mode, onModeChange, previousTo, nextTo }) {
           <Columns2 size={17} />
         </button>
       </div>
-      <a className="button button--primary" href={nextTo}>
+      <button className="button button--ghost" type="button" onClick={onSaveProgress}>
+        Guardar progreso
+      </button>
+      <Link className="button button--primary" to={nextTo}>
         <span>Siguiente</span> <ChevronRight size={18} />
-      </a>
+      </Link>
     </div>
   );
 }

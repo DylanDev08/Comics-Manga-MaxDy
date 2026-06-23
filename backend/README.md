@@ -22,6 +22,7 @@ Copiar `.env.example` a `.env` y completar:
 - `JWT_SECRET`: secreto largo para firmar sesiones.
 - `CLIENT_URL` y `CORS_ORIGIN`: URL del frontend.
 - `COOKIE_NAME`: nombre de cookie HttpOnly.
+- `ADMIN_SEED_EMAIL` y `ADMIN_SEED_PASSWORD`: credenciales solo para crear admin desde seed. Si faltan, el seed omite admin.
 
 ## Endpoints principales
 
@@ -44,3 +45,17 @@ Copiar `.env.example` a `.env` y completar:
 - `POST /api/v1/comments/:commentId/replies`
 - `POST /api/v1/comments/:commentId/like`
 - `POST /api/v1/comments/:commentId/report`
+- `POST /api/v1/ratings/:mangaId`
+- `GET /api/v1/chapters/:chapterId/comments`
+- `POST /api/v1/chapters/:chapterId/comments`
+- `GET /api/v1/admin/dashboard`
+- `GET /api/v1/admin/mangas`
+- `POST /api/v1/admin/mangas`
+- `PATCH /api/v1/admin/mangas/:id`
+- `DELETE /api/v1/admin/mangas/:id`
+- `GET /api/v1/admin/chapters`
+- `POST /api/v1/admin/chapters`
+- `PATCH /api/v1/admin/chapters/:id`
+- `DELETE /api/v1/admin/chapters/:id`
+- `GET /api/v1/admin/comments/reported`
+- `PATCH /api/v1/admin/comments/:id/status`

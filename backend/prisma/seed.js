@@ -10,6 +10,9 @@ const genres = [
   ["Fantasia", "fantasia"],
   ["Sci-Fi", "sci-fi"],
   ["Slice of Life", "slice-of-life"],
+  ["Terror", "terror"],
+  ["Romance", "romance"],
+  ["Superheroes", "superheroes"],
 ];
 
 const mangas = [
@@ -20,7 +23,8 @@ const mangas = [
     description:
       "Una patrulla de repartidores nocturnos protege una ciudad dividida por tecnologia experimental y reglas de clanes urbanos.",
     author: "MaxDy Studio",
-    status: "ONGOING",
+    type: "MANGA",
+    status: "PUBLISHING",
     score: 9.1,
     ranking: 1,
     popularity: 9800,
@@ -35,7 +39,8 @@ const mangas = [
     description:
       "Una aprendiz de caligrafia descubre que sus trazos pueden abrir puertas a regiones escondidas del viejo reino.",
     author: "MaxDy Studio",
-    status: "ONGOING",
+    type: "MANHUA",
+    status: "PUBLISHING",
     score: 8.8,
     ranking: 2,
     popularity: 7600,
@@ -50,6 +55,7 @@ const mangas = [
     description:
       "Un grupo de estudiantes administra un club escolar secreto dedicado a documentar criaturas gigantes pacificas.",
     author: "MaxDy Studio",
+    type: "MANGA",
     status: "FINISHED",
     score: 8.4,
     ranking: 3,
@@ -58,22 +64,54 @@ const mangas = [
     bannerUrl: "https://picsum.photos/seed/kaiju-banner/1400/600",
     genreSlugs: ["slice-of-life", "drama"],
   },
+  {
+    title: "Crimson Cape Weekly",
+    slug: "crimson-cape-weekly",
+    alternativeTitle: "La Capa Carmesi",
+    description:
+      "Una editorial independiente publica historias de superheroes urbanos mientras descubre una conspiracion entre viñetas.",
+    author: "MaxDy Studio",
+    type: "COMIC",
+    status: "PUBLISHING",
+    score: 8.2,
+    ranking: 4,
+    popularity: 5400,
+    coverUrl: "https://picsum.photos/seed/crimson-cape-cover/600/900",
+    bannerUrl: "https://picsum.photos/seed/crimson-cape-banner/1400/600",
+    genreSlugs: ["superheroes", "accion"],
+  },
 ];
 
-async function main() {
-  const passwordHash = await hashPassword("MaxDyDemo123");
+async function seedAdmin() {
+  const email = process.env.ADMIN_SEED_EMAIL;
+  const password = process.env.ADMIN_SEED_PASSWORD;
 
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@maxdy.local" },
-    update: {},
+  if (!email || !password) {
+    console.info("ADMIN_SEED_EMAIL o ADMIN_SEED_PASSWORD no definidos. Seed admin omitido.");
+    return null;
+  }
+
+  if (password.length < 8) {
+    console.info("ADMIN_SEED_PASSWORD debe tener al menos 8 caracteres. Seed admin omitido.");
+    return null;
+  }
+
+  return prisma.user.upsert({
+    where: { email },
+    update: { role: "ADMIN", status: "ACTIVE" },
     create: {
-      username: "maxdy_admin",
-      email: "admin@maxdy.local",
-      passwordHash,
+      username: email.split("@")[0].replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 32) || "admin",
+      email,
+      passwordHash: await hashPassword(password),
       role: "ADMIN",
+      status: "ACTIVE",
       emailVerifiedAt: new Date(),
     },
   });
+}
+
+async function main() {
+  const admin = await seedAdmin();
 
   for (const [name, slug] of genres) {
     await prisma.genre.upsert({
@@ -127,17 +165,23 @@ async function main() {
     }
   }
 
-  await prisma.forumThread.upsert({
-    where: { mangaId_slug: { mangaId: (await prisma.manga.findUnique({ where: { slug: "redline-district" } })).id, slug: "teorias-del-distrito" } },
-    update: {},
-    create: {
-      mangaId: (await prisma.manga.findUnique({ where: { slug: "redline-district" } })).id,
-      userId: admin.id,
-      title: "Teorias del Distrito",
-      slug: "teorias-del-distrito",
-      isPinned: true,
-    },
-  });
+  if (admin) {
+    const redline = await prisma.manga.findUnique({ where: { slug: "redline-district" } });
+
+    if (redline) {
+      await prisma.forumThread.upsert({
+        where: { mangaId_slug: { mangaId: redline.id, slug: "teorias-del-distrito" } },
+        update: {},
+        create: {
+          mangaId: redline.id,
+          userId: admin.id,
+          title: "Teorias del Distrito",
+          slug: "teorias-del-distrito",
+          isPinned: true,
+        },
+      });
+    }
+  }
 }
 
 main()

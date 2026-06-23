@@ -55,7 +55,8 @@ model Manga {
   coverUrl          String?
   bannerUrl         String?
   author            String?
-  status            MangaStatus       @default(ONGOING)
+  type              MangaType         @default(MANGA)
+  status            MangaStatus       @default(PUBLISHING)
   publicationStart  DateTime?
   publicationEnd    DateTime?
   score             Float             @default(0)
@@ -75,6 +76,7 @@ model Manga {
   updatedAt         DateTime          @updatedAt
 
   @@index([status])
+  @@index([type])
   @@index([ranking])
   @@index([popularity])
 }
@@ -276,12 +278,18 @@ enum Role {
 
 enum UserStatus {
   ACTIVE
-  SUSPENDED
-  BANNED
+  BLOCKED
+}
+
+enum MangaType {
+  MANGA
+  MANHWA
+  MANHUA
+  COMIC
 }
 
 enum MangaStatus {
-  ONGOING
+  PUBLISHING
   FINISHED
   PAUSED
   CANCELLED

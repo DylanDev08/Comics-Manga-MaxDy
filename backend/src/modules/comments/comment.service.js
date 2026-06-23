@@ -21,6 +21,14 @@ const getCommentsByManga = (mangaId) => {
   });
 };
 
+const getCommentsByChapter = (chapterId) => {
+  return prisma.comment.findMany({
+    where: { chapterId, parentId: null, status: { not: "DELETED" } },
+    include: commentInclude,
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 const createComment = (userId, mangaId, data) => {
   return prisma.comment.create({
     data: {
@@ -32,6 +40,19 @@ const createComment = (userId, mangaId, data) => {
     },
     include: commentInclude,
   });
+};
+
+const createChapterComment = async (userId, chapterId, data) => {
+  const chapter = await prisma.chapter.findUnique({
+    where: { id: chapterId },
+    select: { id: true, mangaId: true },
+  });
+
+  if (!chapter) {
+    throw new AppError("Capitulo no encontrado", 404);
+  }
+
+  return createComment(userId, chapter.mangaId, { ...data, chapterId });
 };
 
 const replyToComment = async (userId, commentId, content) => {
@@ -117,12 +138,42 @@ const reportComment = (userId, commentId, data) => {
   });
 };
 
+const getReportedComments = () => {
+  return prisma.comment.findMany({
+    where: {
+      OR: [{ status: "REPORTED" }, { reports: { some: { resolvedAt: null } } }],
+    },
+    include: {
+      ...commentInclude,
+      reports: {
+        include: { user: { select: { id: true, username: true, email: true } } },
+        orderBy: { createdAt: "desc" },
+      },
+      manga: { select: { id: true, title: true, slug: true } },
+      chapter: { select: { id: true, title: true, number: true } },
+    },
+    orderBy: { updatedAt: "desc" },
+  });
+};
+
+const updateCommentStatus = (id, status) => {
+  return prisma.comment.update({
+    where: { id },
+    data: { status },
+    include: commentInclude,
+  });
+};
+
 module.exports = {
   getCommentsByManga,
+  getCommentsByChapter,
   createComment,
+  createChapterComment,
   replyToComment,
   updateComment,
   deleteComment,
   toggleLike,
   reportComment,
+  getReportedComments,
+  updateCommentStatus,
 };

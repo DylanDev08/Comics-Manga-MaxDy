@@ -64,8 +64,10 @@ function HomePage() {
       <section className="page-section">
         <SectionHeader eyebrow="Colecciones" title="En emision, finalizados y recomendaciones" />
         <div className="collection-grid">
-          <a href="/catalogo?status=ONGOING">En emision</a>
+          <a href="/catalogo?status=PUBLISHING">En emision</a>
           <a href="/catalogo?status=FINISHED">Finalizados</a>
+          <a href="/catalogo?type=MANHWA">Manhwa</a>
+          <a href="/catalogo?type=COMIC">Comics</a>
           <a href="/ranking">Mejor puntuados</a>
           <a href="/usuario/biblioteca">Tu biblioteca</a>
         </div>

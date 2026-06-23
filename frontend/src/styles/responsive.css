@@ -3,6 +3,15 @@
     display: none;
   }
 
+  .site-nav.is-open {
+    position: absolute;
+    left: 1rem;
+    right: 1rem;
+    top: 72px;
+    display: grid;
+    z-index: 60;
+  }
+
   .hero {
     min-height: 720px;
   }
@@ -10,9 +19,14 @@
   .hero__stats,
   .collection-grid,
   .filters,
+  .forum-hero,
+  .forum-grid,
   .page-section--split,
   .detail-hero,
-  .user-page {
+  .user-page,
+  .admin-page,
+  .admin-form,
+  .admin-stats {
     grid-template-columns: 1fr;
   }
 
